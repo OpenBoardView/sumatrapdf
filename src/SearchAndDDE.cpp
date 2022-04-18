@@ -726,7 +726,8 @@ static const char* HandleSearchCmd(const char* cmd, DDEACK& ack) {
         }
     }
     ack.fAck = 1;
-    bool wasModified = true;
+    char* previousFind = HwndGetTextTemp(win->hwndFindEdit);
+    bool wasModified = !str::Eq(previousFind, term);
     bool showProgress = true;
 
     if (matchCase != -1) {
