@@ -709,8 +709,9 @@ static const WCHAR* HandleSearchCmd(const WCHAR* cmd, DDEACK& ack) {
         win->AsFixed()->textSearch->SetSensitive(matchCase);
     }
 
+    TempWstr previousFind = win::GetTextTemp(win->hwndFindBox);
     win::SetText(win->hwndFindBox, term);
-    FindTextOnThread(win, TextSearchDirection::Forward, term, true /* wasModified */, true /* showProgress */);
+    FindTextOnThread(win, TextSearchDirection::Forward, term, !str::Eq(previousFind, term) /* wasModified */, true /* showProgress */);
     win->Focus();
     return next;
 }
