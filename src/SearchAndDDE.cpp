@@ -740,6 +740,7 @@ static const char* HandleSearchCmd(const char* cmd, DDEACK& ack) {
         win->AsFixed()->textSearch->SetSensitive(matchCase);
     }
 
+    HwndSetText(win->hwndFindEdit, term);
     FindTextOnThread(win, TextSearchDirection::Forward, term, wasModified, showProgress);
     win->Focus();
     return next;
