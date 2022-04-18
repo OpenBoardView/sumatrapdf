@@ -700,7 +700,11 @@ Search DDE command
 static const char* HandleSearchCmd(const char* cmd, DDEACK& ack) {
     AutoFreeStr pdfFile;
     AutoFreeStr term;
+    int matchCase = -1;
     const char* next = str::Parse(cmd, "[Search(\"%s\",\"%s\")]", &pdfFile, &term);
+    if (!next) {
+        next = str::Parse(cmd, "[Search(\"%s\",\"%s\",%u)]", &pdfFile, &term, &matchCase);
+    }
     // TODO: should un-quote text to allow searching text with '"' in them
     if (!next) {
         return nullptr;
@@ -724,6 +728,18 @@ static const char* HandleSearchCmd(const char* cmd, DDEACK& ack) {
     ack.fAck = 1;
     bool wasModified = true;
     bool showProgress = true;
+
+    if (matchCase != -1) {
+        WORD state = (WORD)SendMessageW(win->hwndToolbar, TB_GETSTATE, CmdFindMatch, 0);
+        if (matchCase) {
+            state |= TBSTATE_CHECKED;
+        } else {
+            state &= ~TBSTATE_CHECKED;
+        }
+        SendMessageW(win->hwndToolbar, TB_SETSTATE, CmdFindMatch, state);
+        win->AsFixed()->textSearch->SetSensitive(matchCase);
+    }
+
     FindTextOnThread(win, TextSearchDirection::Forward, term, wasModified, showProgress);
     win->Focus();
     return next;
