@@ -17,6 +17,7 @@ LRESULT OnCopyData(HWND hwnd, WPARAM wp, LPARAM lp);
 bool NeedsFindUI(MainWindow* win);
 void ClearSearchResult(MainWindow* win);
 bool OnInverseSearch(MainWindow* win, int x, int y);
+void OnInverseSearchText(MainWindow* win, TextSelection* textSelection);
 void ShowForwardSearchResult(MainWindow* win, const char* fileName, int line, int col, int ret, int page,
                              Vec<Rect>& rects);
 void PaintForwardSearchMark(MainWindow* win, HDC hdc);

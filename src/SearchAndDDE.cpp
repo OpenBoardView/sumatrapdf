@@ -537,6 +537,47 @@ bool OnInverseSearch(MainWindow* win, int x, int y) {
     return true;
 }
 
+void OnInverseSearchText(MainWindow* win, TextSelection* textSelection) {
+    WindowTab* tab = win->CurrentTab();
+    if (!tab || tab->GetEngineType() != kindEngineMupdf) {
+        return;
+    }
+
+    WCHAR* s = textSelection->ExtractText("\r\n");
+    char* text = ToUtf8Temp(s);
+    str::Free(s);
+
+    const char* inverseSearchCmd = gGlobalPrefs->inverseSearchCmdLine;
+
+    if (!str::IsEmpty(inverseSearchCmd)) {
+        const char* perc;
+        str::Str cmdline(256);
+
+        while ((perc = str::FindChar(inverseSearchCmd, '%')) != nullptr) {
+            cmdline.Append(inverseSearchCmd, perc - inverseSearchCmd);
+            inverseSearchCmd = perc + 2;
+            perc++;
+
+            if (*perc == 'f') {
+                char* fname = path::NormalizeTemp(tab->filePath);
+                cmdline.Append("\"");
+                cmdline.Append(fname);
+                cmdline.Append("\"");
+            } else if (*perc == 's') {
+                cmdline.AppendFmt("\"%s\"", text);
+            } else if (*perc == '%') {
+                cmdline.Append("%");
+            } else {
+                cmdline.Append(perc - 1, 2);
+            }
+        }
+        cmdline.Append(inverseSearchCmd);
+        // resolve relative paths with relation to SumatraPDF.exe's directory
+        char* appDir = GetExeDirTemp();
+        AutoCloseHandle process(LaunchProcess(cmdline.Get(), appDir));
+    }
+}
+
 // Show the result of a PDF forward-search synchronization (initiated by a DDE command)
 void ShowForwardSearchResult(MainWindow* win, const char* fileName, int line, int /* col */, int ret, int page,
                              Vec<Rect>& rects) {
