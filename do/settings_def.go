@@ -294,9 +294,9 @@ var (
 			"if true and SessionData isn't empty, that session will be restored at startup").setExpert(),
 		mkField("UiLanguage", String, nil,
 			"ISO code of the current UI language").setDoc("[ISO code](langs.html) of the current UI language"),
-		mkField("InverseSearchCmdLine", String, nil,
+		mkField("InverseSearchCmdLine", String, "openboardview.exe --reversesearch %f %s",
 			"pattern used to launch the LaTeX editor when doing inverse search"),
-		mkField("EnableTeXEnhancements", Bool, false,
+		mkField("EnableTeXEnhancements", Bool, true,
 			"if true, we expose the SyncTeX inverse search command line in Settings -> Options"),
 		mkField("DefaultDisplayMode", String, "automatic",
 			"how pages should be laid out by default, needs to be synchronized with "+
