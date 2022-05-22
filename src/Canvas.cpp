@@ -598,6 +598,7 @@ static void OnMouseLeftButtonDblClk(WindowInfo* win, int x, int y, WPARAM key) {
             dm->textSelection->SelectWordAt(pageNo, pt.x, pt.y);
             UpdateTextSelection(win, false);
             RepaintAsync(win, 0);
+            OnInverseSearchText(win, dm->textSelection);
         }
         return;
     }
