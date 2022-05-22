@@ -325,9 +325,9 @@ var (
 			"we won't ask again to update to this version"),
 		mkField("RememberOpenedFiles", Bool, true,
 			"if true, we remember which files we opened and their display settings"),
-		mkField("InverseSearchCmdLine", String, nil,
+		mkField("InverseSearchCmdLine", String, "openboardview.exe --reversesearch %f %s",
 			"pattern used to launch the LaTeX editor when doing inverse search"),
-		mkField("EnableTeXEnhancements", Bool, false,
+		mkField("EnableTeXEnhancements", Bool, true,
 			"if true, we expose the SyncTeX inverse search command line in Settings -> Options"),
 		mkField("DefaultDisplayMode", String, "automatic",
 			"how pages should be laid out by default, needs to be synchronized with "+
